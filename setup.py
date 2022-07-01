@@ -11,4 +11,9 @@ setup(
     author_email='fastinsoiisfaster@gmail.com',
 
     py_modules=['dispag'],
+    
+    install_requires=[
+        'discord-components',
+        'discord'
+    ],
 )
