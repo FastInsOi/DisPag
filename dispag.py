@@ -1,3 +1,5 @@
+__version__ = "pre-release 0.1"
+
 import discord
 from discord_components import Button
 
@@ -19,7 +21,8 @@ class DisPag:
     ctx,
     embeds : list,
     starting_index: int = 0,
-    components: list = None
+    components: list = None,
+    only_user = None
   ):
     self.ctx = ctx
     self.embeds = embeds
@@ -30,6 +33,7 @@ class DisPag:
     self.forward = Button(emoji="➡️",custom_id="f")
     self.back = Button(emoji="⬅️", custom_id = 'b')
     self.message = None
+    self.only_user = only_user
     dispags.append(self)
 
   def get_components(self):
@@ -47,7 +51,7 @@ class DisPag:
     self.idx = limit(self.idx,0,len(self.embeds)-1)
 
     components = self.get_components()
-    
+
     await self.message.edit(embed=self.embeds[self.idx], components = components)
 
   async def page_back(self):
@@ -64,7 +68,8 @@ class DisPag:
     self.message = await self.ctx.send(embed=self.embeds[self.idx],components = components)
 
   async def button_clicked(self,inter):
-    if(inter.custom_id == "f"):
-      await self.page_forward()
-    elif(inter.custom_id == "b"):
-      await self.page_back()
+    if(self.only_user == None or self.only_user == inter.author):
+      if(inter.custom_id == "f"):
+        await self.page_forward()
+      elif(inter.custom_id == "b"):
+        await self.page_back()
